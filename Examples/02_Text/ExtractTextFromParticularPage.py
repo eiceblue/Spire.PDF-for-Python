@@ -1,3 +1,4 @@
+
 from spire.pdf.common import *
 from spire.pdf import *
 
@@ -10,14 +11,22 @@ def WriteAllText(fname:str,text:List[str]):
 inputFile = "./Demos/Data/PDFTemplate-Az.pdf"
 outputFile = "ExtractTextFromParticularPage_out.txt"
 
-
+# Create a pdf document
 doc = PdfDocument()
 # Read a pdf file
 doc.LoadFromFile(inputFile)
+
 # Get the first page
 page = doc.Pages[0]
+
 # Extract text from page keeping white space
-text = page.ExtractText(True)
+textExtractor =PdfTextExtractor(page)
+option =PdfTextExtractOptions()
+text = textExtractor.ExtractText(option)
+
 # Write a line of text to the file
 WriteAllText(outputFile, text)
 doc.Close()
+
+
+

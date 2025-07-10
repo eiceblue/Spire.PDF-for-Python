@@ -11,9 +11,16 @@ doc.LoadFromFile(inputFile)
 page = doc.Pages[0]
 # Create a PdfTextReplacer using the first page
 replacer = PdfTextReplacer(page)
+# Set options
+options = PdfTextReplaceOptions()        
+options.ReplaceType = ReplaceActionType.WholeWord        
+textreplacer.Options = options  
 # Replace all texts in this page
 replacer.ReplaceAllText("Spire.PDF","E-iceblue")
 # Replace the first found word
 replacer.ReplaceText("Adobe Acrobat", "PDF editors")
 doc.SaveToFile(outputFile)
 doc.Close()
+
+
+

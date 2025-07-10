@@ -13,9 +13,12 @@ doc.LoadFromFile(inputfile)
 #Get the first page.
 page = doc.Pages[0]
 #Get images of the first page.
-imageInfo = page.ImagesInfo
+# change: imageInfo = page.ImagesInfo
+imageHelper = PdfImageHelper()
+imageInfo = imageHelper.GetImagesInfo(page)
 #Replace the first image on the page.
-page.ReplaceImage(imageInfo[0].Index, PdfImage.FromFile(inputImg))
+# change: page.ReplaceImage(imageInfo[0].Index, PdfImage.FromFile(inputImg))
+imageHelper.ReplaceImage(imageInfo[0], PdfImage.FromFile(inputImg))
 #Save the document
 doc.SaveToFile(outputFile)
 doc.Close()

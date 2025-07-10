@@ -10,7 +10,10 @@ pdf.LoadFromFile(inputfile)
 #Get the first page
 page = pdf.Pages[0]
 #Delete the first image on the page
-page.DeleteImage(0)
+# change:page.DeleteImage(0)
+imageHelper = PdfImageHelper()
+imageInfo = imageHelper.GetImagesInfo(page)
+imageHelper.DeleteImage(imageInfo[0])
 #Save the document
 pdf.SaveToFile(outputFile)
 pdf.Close()

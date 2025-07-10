@@ -11,7 +11,9 @@ doc.LoadFromFile(inputfile)
 #Get the first page.
 page = doc.Pages[0]
 #Get images of the first page.
-imageInfo = page.ImagesInfo
+# change: imageInfo = page.ImagesInfo
+imageHelper = PdfImageHelper()
+imageInfo = imageHelper.GetImagesInfo(page)
 image = PdfImage.FromStream(imageInfo[0].Image)
 #Get width and height of image
 widthInPixel = image.Width
@@ -24,7 +26,8 @@ height = convertor.ConvertFromPixels(float(heightInPixel), PdfGraphicsUnit.Point
 xPos = imageInfo[0].Bounds.X
 yPos = imageInfo[0].Bounds.Y
 #Remove the image
-page.DeleteImage(0)
+# change: page.DeleteImage(0)
+imageHelper.DeleteImage(imageInfo[0])
 #Define a rectangle
 rect = RectangleF(PointF(xPos, yPos), SizeF(width, height))
 #Define string format
