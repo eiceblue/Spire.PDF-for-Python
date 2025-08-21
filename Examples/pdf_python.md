@@ -1,5 +1,3 @@
-# Python代码核心功能提取
-
 # spire.pdf python hello world
 ## create a simple pdf document with hello world text
 ```python
@@ -6340,4 +6338,5 @@ doc.ViewerPreferences.PageLayout = PdfPageLayout.SinglePage
 ```
 
 ---
+
 
