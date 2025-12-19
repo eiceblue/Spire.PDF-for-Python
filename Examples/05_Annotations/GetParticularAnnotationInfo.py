@@ -1,7 +1,7 @@
 from spire.pdf.common import *
 from spire.pdf import *
 
-inputFile = "./Demos/Data/Template_Pdf_3.pdf"
+inputFile = "Data/Template_Pdf_3.pdf"
 outputFile = "GetParticularAnnotationInfo.txt"
 
 #Create a new PDF document.
@@ -17,11 +17,8 @@ if annotations.Count > 0:
         #Get particular annotation information from the document.
         if isinstance(annotation, PdfTextAnnotationWidget):
             sb.append("Annotation information: ")
-            sb.append("Text: " + annotation.Text)
-            modifiedDate = annotation.ModifiedDate.ToString()
-            sb.append("ModifiedDate: " + modifiedDate)
             sb.append("Annotation text: " + annotation.Text)
-            sb.append("Annotation ModifiedDate: " + annotation.ModifiedDate.ToString())
+            sb.append("Annotation ModifiedDate: " + annotation.ModifiedDate.strftime("%Y/%m/%d %H:%M:%S"))
             sb.append("Annotation author: " + annotation.Author)
             sb.append("Annotation Name: " + annotation.Name)
 #Save to file.

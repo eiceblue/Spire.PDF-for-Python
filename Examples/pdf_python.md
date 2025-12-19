@@ -2122,7 +2122,7 @@ polygon.Text = "This is a polygon annotation"
 polygon.Author = "E-ICEBLUE"
 polygon.Subject = "polygon annotation demo"
 polygon.BorderEffect = PdfBorderEffect.BigCloud
-polygon.ModifiedDate = DateTime.get_Now()
+polygon.ModifiedDate = datetime.now()
 #Add the annotation to Pdf page
 page.AnnotationsWidget.Add(polygon)
 ```
@@ -2145,7 +2145,7 @@ polyline.Author = "E-ICEBLUE"
 polyline.Subject = "polygon annotation demo"
 polyline.Name = "Test Annotation"
 polyline.Border = PdfAnnotationBorder(1)
-polyline.ModifiedDate = DateTime.get_Now()
+polyline.ModifiedDate = datetime.now()
 #Add the annotation into page
 page.AnnotationsWidget.Add(polyline)
 ```
@@ -2215,7 +2215,7 @@ if annotations.Count > 0:
             continue
         sb.append("Annotation information: ")
         sb.append("Text: " + annotation.Text)
-        modifiedDate = annotation.ModifiedDate.ToString()
+        modifiedDate = annotation.ModifiedDate.strftime("%Y/%m/%d %H:%M:%S")
         sb.append("ModifiedDate: " + modifiedDate)
 ```
 
@@ -2237,11 +2237,8 @@ if annotations.Count > 0:
         #Get particular annotation information from the document.
         if isinstance(annotation, PdfTextAnnotationWidget):
             sb.append("Annotation information: ")
-            sb.append("Text: " + annotation.Text)
-            modifiedDate = annotation.ModifiedDate.ToString()
-            sb.append("ModifiedDate: " + modifiedDate)
             sb.append("Annotation text: " + annotation.Text)
-            sb.append("Annotation ModifiedDate: " + annotation.ModifiedDate.ToString())
+            sb.append("Annotation ModifiedDate: " + annotation.ModifiedDate.strftime("%Y/%m/%d %H:%M:%S"))
             sb.append("Annotation author: " + annotation.Author)
             sb.append("Annotation Name: " + annotation.Name)
 pdf.Close()
@@ -2533,8 +2530,8 @@ attachment = collection.get_Item(0)
 content = []
 content.append("Filename: " + attachment.FileName)
 content.append("Description: " + attachment.Description)
-content.append("Creation Date: " + attachment.CreationDate.ToString())
-content.append("Modification Date: " + attachment.ModificationDate.ToString())
+content.append("Creation Date: " + attachment.CreationDate.strftime("%Y/%m/%d %H:%M:%S"))
+content.append("Modification Date: " + attachment.ModificationDate.strftime("%Y/%m/%d %H:%M:%S"))
 pdf.Close()
 ```
 
@@ -3505,7 +3502,7 @@ page = document.Pages[0]
 font = PdfTrueTypeFont("Arial", 12.0, PdfFontStyle.Regular, True)
 brush = PdfSolidBrush(PdfRGBColor(Color.get_Blue()))
 #Time text
-timeString = DateTime.get_Now().ToString("MM/dd/yy hh:mm:ss tt ")
+timeString = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
 #Create a template and rectangle, draw the string
 template = PdfTemplate(140.0, 15.0)
 rect = RectangleF(PointF(page.ActualSize.Width - template.Width - 10, page.ActualSize.Height - template.Height - 10), template.Size)
@@ -3560,7 +3557,7 @@ path.AddLine(template.GetBounds().X, template.GetBounds().Y + CornerRadius / flo
 template.Graphics.DrawPath(pen, path)
 #Draw stamp text
 s1 = "REVISED\n"
-s2 = "by E-iceblue at " + DateTime.get_Now().ToString("MM dd, yyyy")
+s2 = "by E-iceblue at " + datetime.now().strftime("%m %d, %Y")
 template.Graphics.DrawString(s1, font1, brush, PointF(5.0, 10.0))
 font2 = PdfTrueTypeFont("Lucida Sans Unicode", 9.0, PdfFontStyle.Bold, True)
 template.Graphics.DrawString(s2, font2, brush, PointF(2.0, 30.0))
@@ -3660,8 +3657,8 @@ if annot.Count > 0:
             stamp = annotation if isinstance(annotation, PdfRubberStampAnnotationWidget) else None
             stamp.Author = "TestUser"
             stamp.Subject = "E-iceblue"
-            stamp.CreationDate = DateTime.get_Now()
-            stamp.ModifiedDate = DateTime.get_Now()
+            stamp.CreationDate = datetime.now()
+            stamp.ModifiedDate = datetime.now()
 ```
 
 ---
@@ -5855,9 +5852,9 @@ docInfo = doc.DocumentInformation
 
 # Extract document properties
 author = docInfo.Author
-creationDate = docInfo.CreationDate.ToString()
-keywords = docInfo.Keywords
-modifyDate = docInfo.ModificationDate.ToString()
+creationDate = docInfo.CreationDate.strftime("%Y/%m/%d %H:%M:%S")
+keywords = docInfo.keywords
+modifyDate = docInfo.ModificationDate.strftime("%Y/%m/%d %H:%M:%S")
 subject = docInfo.Subject
 title = docInfo.Title
 ```

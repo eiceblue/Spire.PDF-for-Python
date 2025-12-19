@@ -1,5 +1,6 @@
 from spire.pdf.common import *
 from spire.pdf import *
+from datetime import datetime
 
 outputFile = "CreatePdfPolygonAnnotation_out.pdf"
 
@@ -15,7 +16,7 @@ polygon.Text = "This is a polygon annotation"
 polygon.Author = "E-ICEBLUE"
 polygon.Subject = "polygon annotation demo"
 polygon.BorderEffect = PdfBorderEffect.BigCloud
-polygon.ModifiedDate = DateTime.get_Now()
+polygon.ModifiedDate = datetime.now()
 #Add the annotation to Pdf page and save the document.
 page.AnnotationsWidget.Add(polygon)
 #Save the document

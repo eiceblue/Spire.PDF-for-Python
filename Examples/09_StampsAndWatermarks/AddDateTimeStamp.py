@@ -1,7 +1,8 @@
 from spire.pdf.common import *
 from spire.pdf import *
+from datetime import datetime
 
-inputFile = "./Demos/Data/pdfTemplate_N.pdf"
+inputFile = "Data/pdfTemplate_N.pdf"
 outputFile = "AddDateTimeStamp.pdf"
 
 #Load a Pdf document from disk
@@ -13,7 +14,7 @@ page = document.Pages[0]
 font = PdfTrueTypeFont("Arial", 12.0, PdfFontStyle.Regular, True)
 brush = PdfSolidBrush(PdfRGBColor(Color.get_Blue()))
 #Time text
-timeString = DateTime.get_Now().ToString("MM/dd/yy hh:mm:ss tt ")
+timeString =datetime.now().strftime("%m/%d/%Y %H:%M:%S")
 #Create a template and rectangle, draw the string
 template = PdfTemplate(140.0, 15.0)
 rect = RectangleF(PointF(page.ActualSize.Width - template.Width - 10, page.ActualSize.Height - template.Height - 10), template.Size)

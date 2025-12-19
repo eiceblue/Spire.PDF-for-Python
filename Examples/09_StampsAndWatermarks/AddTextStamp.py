@@ -1,7 +1,8 @@
 from spire.pdf.common import *
 from spire.pdf import *
+from datetime import datetime
 
-inputFile = "./Demos/Data/AddTextStamp.pdf"
+inputFile = "Data/AddTextStamp.pdf"
 outputFile = "AddTextStamp_out.pdf"
 
 #Open a pdf document
@@ -25,7 +26,7 @@ path.AddLine(template.GetBounds().X, template.GetBounds().Y + template.Height - 
 template.Graphics.DrawPath(pen, path)
 #Draw stamp text
 s1 = "REVISED\n"
-s2 = "by E-iceblue at " + DateTime.get_Now().ToString("MM dd, yyyy")
+s2 = "by E-iceblue at " + datetime.now().strftime("%m %d, %Y")
 template.Graphics.DrawString(s1, font1, brush, PointF(5.0, 10.0))
 font2 = PdfTrueTypeFont("Lucida Sans Unicode", 9.0, PdfFontStyle.Bold, True)
 template.Graphics.DrawString(s2, font2, brush, PointF(2.0, 30.0))

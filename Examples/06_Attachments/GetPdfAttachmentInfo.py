@@ -1,7 +1,7 @@
 from spire.pdf.common import *
 from spire.pdf import *
 
-inputFile = "./Demos/Data/Template_Pdf_2.pdf"
+inputFile = "Data/Template_Pdf_2.pdf"
 outputFile = "GetPdfAttachmentInfo.txt"
 
 #Create a new PDF document
@@ -16,8 +16,8 @@ attachment = collection.get_Item(0)
 content = []
 content.append("Filename: " + attachment.FileName)
 content.append("Description: " + attachment.Description)
-content.append("Creation Date: " + attachment.CreationDate.ToString())
-content.append("Modification Date: " + attachment.ModificationDate.ToString())
+content.append("Creation Date: " + attachment.CreationDate.strftime("%Y/%m/%d %H:%M:%S"))
+content.append("Modification Date: " + attachment.ModificationDate.strftime("%Y/%m/%d %H:%M:%S"))
 #Save to file.
 with open(outputFile, "w") as file:
     file.write("\n".join(content))

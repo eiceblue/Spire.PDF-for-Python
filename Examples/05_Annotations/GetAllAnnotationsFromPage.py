@@ -1,7 +1,7 @@
 from spire.pdf.common import *
 from spire.pdf import *
 
-inputFile = "./Demos/Data/Template_Pdf_3.pdf"
+inputFile = "Data/Template_Pdf_3.pdf"
 outputFile = "GetAllAnnotationsFromPage.txt"
 
 #Create a new PDF document.
@@ -19,7 +19,7 @@ if annotations.Count > 0:
             continue
         sb.append("Annotation information: ")
         sb.append("Text: " + annotation.Text)
-        modifiedDate = annotation.ModifiedDate.ToString()
+        modifiedDate = annotation.ModifiedDate.strftime("%Y/%m/%d %H:%M:%S")
         sb.append("ModifiedDate: " + modifiedDate)
 #Save to file.
 with open(outputFile, "w") as file:

@@ -1,5 +1,6 @@
 from spire.pdf.common import *
 from spire.pdf import *
+from datetime import datetime
 
 outputFile = "CreatePolylineAnnotation.pdf"
 
@@ -16,7 +17,7 @@ polyline.Author = "E-ICEBLUE"
 polyline.Subject = "polygon annotation demo"
 polyline.Name = "Test Annotation"
 polyline.Border = PdfAnnotationBorder(1)
-polyline.ModifiedDate = DateTime.get_Now()
+polyline.ModifiedDate = datetime.now()
 #Add the annotation into page
 page.AnnotationsWidget.Add(polyline)
 #Save pdf
