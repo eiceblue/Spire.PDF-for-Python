@@ -6336,4 +6336,241 @@ doc.ViewerPreferences.PageLayout = PdfPageLayout.SinglePage
 
 ---
 
+# PDF Text Markup Annotation
+## Add text markup annotations to multi-line text in a PDF document
+```python
+# Get the first page (index 0) of the loaded PDF document
+page = pdf.Pages[0]
+
+# Initialize a text finder object for the selected page
+finder = PdfTextFinder(page)
+
+# Set the text search option to match whole words only
+finder.Options.Parameter = TextFindParameter.WholeWord
+
+# Update the text search option to also ignore case during matching
+finder.Options.Parameter = TextFindParameter.IgnoreCase
+
+# Search for the specified text string on the page and get all matching fragments
+fragments = finder.Find("An older meaning still in use today is that of Aristotle, for whom scientific knowledge was a body of reliable knowledge that can be logically and rationally explained.")
+
+# Retrieve the first matched text fragment
+textFragment = fragments[0]
+
+# Define the annotation note text to be added
+text = "There is a markup annotation added by Spire.PDF for Python."
+
+# Initialize a list to store quadrilateral points for each character or word bounding box;
+# each rectangle requires 4 points, so total size is 4 times the number of bounds
+quadPoints = [None for _ in range(len(textFragment.Bounds) * 4)]
+
+# Iterate over each bounding rectangle of the found text fragment
+for i in range(len(textFragment.Bounds)):
+    # Get the current bounding rectangle
+    rect = textFragment.Bounds[i]
+    
+    # Assign the top-left corner of the rectangle as the first quad point
+    quadPoints[4 * i] = PointF(rect.Left, rect.Top)
+    
+    # Assign the top-right corner of the rectangle as the second quad point
+    quadPoints[4 * i + 1] = PointF(rect.Right, rect.Top)
+    
+    # Assign the bottom-left corner of the rectangle as the third quad point
+    quadPoints[4 * i + 2] = PointF(rect.Left, rect.Bottom)
+    
+    # Assign the bottom-right corner of the rectangle as the fourth quad point
+    quadPoints[4 * i + 3] = PointF(rect.Right, rect.Bottom)
+
+# Create a text markup annotation using the first bounding rectangle and the computed quad points
+annotation = PdfTextMarkupAnnotation(textFragment.Bounds[0], quadPoints)
+
+# Set the popup note text for the annotation
+annotation.Text = text
+
+# Set the highlight color of the markup annotation to blue
+annotation.TextMarkupColor = PdfRGBColor(Color.get_Blue())
+
+# Add the created annotation to the page's annotation collection
+page.Annotations.Add(annotation)
+```
+
+---
+
+# PDF to Image Conversion with DPI
+## Convert PDF pages to images with specified DPI settings
+
+```python
+# Create a PDF document
+doc = PdfDocument()
+
+# Convert each page to an image with 300x300 DPI
+for i in range(doc.Pages.Count):
+    # Save page as image with specified DPI
+    with doc.SaveAsImage(i, 300, 300) as imageS:
+        imageS.Save("ToImage-img-{0:d}.png".format(i))
+
+# Close the document
+doc.Close()
+```
+
+---
+
+# PDF Table Border Color Change
+## Change the border color of a PDF table
+```python
+#Create a pdf document
+document = PdfDocument()
+
+#Add a new page
+page = document.Pages.Add()
+
+#Create a grid
+grid = PdfGrid()
+
+#Add rows
+for r in range(5):
+   row = grid.Rows.Add()
+
+#Add columns
+grid.Columns.Add(5)
+
+#Set the width for column
+grid.Columns[0].Width = 120
+grid.Columns[1].Width = 120
+grid.Columns[2].Width = 120
+grid.Columns[3].Width = 50
+grid.Columns[4].Width = 60
+
+#Set the height of rows
+for i in range(grid.Rows.Count):
+    grid.Rows[i].Height = 12.5
+
+#Set the font
+trueTypeFont = PdfTrueTypeFont("Arial", 8.0, PdfFontStyle.Bold, True)
+grid.Rows[0].Style.Font = trueTypeFont
+
+#Set color of border
+border = PdfBorders()
+border.All = PdfPen(Color.get_LightBlue())
+
+#Iterate each row of grid
+for i in range(grid.Rows.Count):
+    pgr = grid.Rows[i]
+    for j in range(pgr.Cells.Count):
+      pgc = pgr.Cells[j]
+      pgc.Style.Borders = border
+
+#Draw the grid
+grid.Draw(page, PointF(20.0, 30.0))
+```
+
+---
+
+# PDF Grid Creation
+## Create a simple grid in a PDF document
+```python
+# Create a pdf document 
+doc = PdfDocument()
+
+# Add a new page
+page = doc.Pages.Add()
+
+# Create a grid
+grid = PdfGrid()
+grid.Columns.Add(5)
+
+# Iterate each column of grid
+for j in range(grid.Columns.Count):
+    # Set width of column
+    grid.Columns[j].Width = 100
+
+# Add rows
+for i in range(10):
+    grid.Rows.Add()
+
+# Set font styles for specific rows and cells
+trueTypeFont = PdfTrueTypeFont("Arial", 10.0, PdfFontStyle.Regular, True)
+
+height = 21.0
+
+# Iterate each row of grid
+for i in range(grid.Rows.Count):
+    gridRow = grid.Rows.get_Item(i)
+    # Set the height for row 
+    gridRow.Height = height
+    gridRow.Style.Font = trueTypeFont
+
+    for j in range(gridRow.Cells.Count):
+        gridRow.Cells.get_Item(j).Value = "Row_" + str(i+1) + "Cell_" + str(j+1) 
+        gridRow.Cells.get_Item(j).StringFormat = PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle)
+
+# Draw the updated grid on the page at a different location
+grid.Draw(page, PointF(10.0, 100.0))
+```
+
+---
+
+# PDF Table Cell Merging
+## Merge cells horizontally and vertically in PDF tables
+```python
+# Create a grid
+grid = PdfGrid()
+grid.Columns.Add(5)
+
+# Add rows
+row0 = grid.Rows.Add()
+row1 = grid.Rows.Add()
+
+# Set cell values and merge rows
+row0.Cells[0].Value = "Corporation"
+row0.Cells[0].RowSpan = 2  # Merge two rows
+
+# Set cell values and merge columns
+row0.Cells[1].Value = "B&K Undersea Photo"
+row0.Cells[1].ColumnSpan = 3  # Merge three columns
+row0.Cells[1].StringFormat = PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle)
+
+# Style a cell
+row0.Cells[4].Value = "World"
+row0.Cells[4].Style.Font = PdfTrueTypeFont("Arial", 10.0, PdfFontStyle.Bold, True)
+row0.Cells[4].StringFormat = PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle)
+row0.Cells[4].Style.BackgroundBrush = PdfBrushes.get_LightGreen()
+
+# Merge columns in the second row
+row1.Cells[1].Value = "Diving International Unlimited"
+row1.Cells[1].ColumnSpan = 4  # Merge four columns
+row1.Cells[1].StringFormat = PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle)
+```
+
+---
+
+# spire.pdf grid with no borders
+## create a PDF grid table with no borders
+```python
+# Create a new grid
+grid = PdfGrid()
+
+# Add a row to the grid
+row1 = grid.Rows.Add()
+
+# Add 2 columns to the grid
+grid.Columns.Add(2)
+
+# Set border dash style for specific cell in the row
+row1.Cells.get_Item(0).Style.Borders.Bottom.DashStyle = PdfDashStyle.none
+row1.Cells.get_Item(0).Style.Borders.Top.DashStyle = PdfDashStyle.none
+row1.Cells.get_Item(0).Style.Borders.Right.DashStyle = PdfDashStyle.none
+row1.Cells.get_Item(0).Style.Borders.Left.DashStyle = PdfDashStyle.none
+
+# Set cell values in the row
+str = "Hello Word!"
+for i in range(grid.Columns.Count):
+    row1.Cells[i].Value = str
+
+# Draw the grid on the page at the specified position
+grid.Draw(page, PointF(0.0, 50.0))
+```
+
+---
+
 
