@@ -6572,5 +6572,204 @@ grid.Draw(page, PointF(0.0, 50.0))
 ```
 
 ---
+# spire.pdf python core function
+## ObtainFontStyleOfText
+```python
+# Get the first page of the document
+pdfPageBase = doc.Pages.get_Item(0)
+
+# Define a rectangular area for text searching (x, y, width, height)
+rctg = RectangleF(0.0, 0.0, 200.0, 300.0)
+
+# Initialize PdfTextFinder with the specific page
+finder = PdfTextFinder(pdfPageBase)
+
+# Set search parameters (default behavior)
+finder.Options.Parameter = TextFindParameter.none
+
+# Restrict the search area to the defined rectangle
+finder.Options.Area = rctg
+
+# Execute the search and retrieve all text fragments within the area
+findouts = finder.FindAllText()
+
+# Iterate through each found text fragment and extract text and font style
+for fragment in findouts:
+    # Extract the text content
+    text = fragment.Text
+    
+    # Extract the font name from the first text state
+    font_name = fragment.TextStates[0].FontName
+    
+    # Extract the font size (rounded to 2 decimal places)
+    font_size = round(fragment.TextStates[0].FontSize, 2)
+    
+    # Use the extracted information as needed
+    # e.g., store or display text, font_name, font_size
+```
+
+---
+
+# spire.pdf python core functionality
+## Replace text in PDF
+```python
+# Create a PdfTextReplacer using the first page
+replacer = PdfTextReplacer(page)
+# Set replacement options
+options = PdfTextReplaceOptions()        
+options.ReplaceType = ReplaceActionType.WholeWord
+replacer.Options = options  
+# Replace all occurrences of a word
+replacer.ReplaceAllText("Spire.PDF","E-iceblue")
+# Replace the first occurrence of a word
+replacer.ReplaceText("Adobe Acrobat", "PDF editors")
+```
+
+---
+
+# spire.pdf python core functionality
+## Customize signature appearance
+```python
+class MyPdfCustomAppearance(IPdfSignatureAppearance):
+    def __init__(self):
+        super(MyPdfCustomAppearance,self).__init__(None) 
+
+    def Generate(self, g: PdfCanvas):
+        x = 0.0
+        y = 0.0
+        fontSize = 10.0
+        font = PdfTrueTypeFont("Times New Roman", fontSize, PdfFontStyle.Regular, True)
+        lineHeight = fontSize
+        image = PdfImage.FromFile("logo.png")
+        g.DrawImage(image, x, y)
+        x = float(image.Width)
+        g.DrawString("Signer: Gary", font, PdfBrushes.get_Red(), PointF(x, y))
+        y += lineHeight + 5
+        g.DrawString("Phone: +86 12345678", font, PdfBrushes.get_Black(), PointF(x, y))
+        y += lineHeight + 5
+        g.DrawString("Address: Sichuan Province, China", font, PdfBrushes.get_Black(), PointF(x, y))
+
+# Apply custom appearance to a signature
+doc = PdfDocument()
+signatureMaker = PdfOrdinarySignatureMaker(doc, "certificate.pfx", "password")
+my_appearance = MyPdfCustomAppearance()
+callback_ptr = my_appearance.register_callback()
+customAppearance = PdfCustomAppearance(callback_ptr)
+signatureMaker.MakeSignature("Signer", doc.Pages.get_Item(0), 90.0, 550.0, 270.0, 640.0, customAppearance)
+```
+
+---
+
+# spire.pdf python digital signature
+## Create a digital signature for a PDF with appearance, permissions, and LTV support via HTTP OCSP
+```python
+doc = PdfDocument()
+# Create a digital signature
+signature = Security_PdfSignature(doc, doc.Pages.get_Item(0), "./Demos/Data/gary.pfx", "e-iceblue", "signature")
+# Set the bounds of the signature box
+signature.Bounds = RectangleF(PointF(90.0, 550.0), SizeF(180.0, 90.0))
+# Configure appearance and details
+signature.NameLabel = "Digitally signed by:Gary"
+signature.LocationInfoLabel = "Location:"
+signature.LocationInfo = "CN"
+signature.ReasonLabel = "Reaseon:"
+signature.Reason = "Ensure authenticity"
+signature.ContactInfoLabel = "Contact Number: "
+signature.ContactInfo = "028-81705109"
+# Set document permissions
+signature.DocumentPermissions = PdfCertificationFlags.AllowFormFill.value | PdfCertificationFlags.ForbidChanges.value
+# Set graphic mode for the signature
+signature.GraphicsMode = Security_GraphicMode.SignImageAndSignDetail
+# Set the signature image
+signature.SignImageSource = PdfImage.FromFile("./Demos/Data/E-iceblueLogo.png")
+# Enable HTTP OCSP for LTV
+signature.ConfigureHttpOCSP(None, None)
+```
+
+---
+
+# spire.pdf python core functionality
+## Convert PDF to Excel with line layout options
+```python
+# Create a new PdfDocument instance
+pdf = PdfDocument()
+
+# Initialize line layout options: convertToMultipleSheet=True, rotatedText=False, splitCell=True, wrapText=True, overlapText=True
+lineOption = XlsxLineLayoutOptions(True, False, True, True, True)
+
+# Apply line layout options for PDF to XLSX conversion (actual conversion triggered on save, omitted here)
+pdf.ConvertOptions.SetPdfToXlsxOptions(lineOption)
+```
+
+---
+
+# spire.pdf python core feature
+## Convert PDF to Excel with table layout options
+```python
+pdf = PdfDocument()
+pdf.LoadFromFile(inputFile)
+options = XlsxSpecialTableLayoutOptions(False, False, False)
+pdf.ConvertOptions.SetPdfToXlsxOptions(options)
+pdf.SaveToFile(outputFile, FileFormat.XLSX)
+pdf.Close()
+```
+
+---
+
+# spire.pdf python core feature
+## PDF to Excel conversion with text layout options
+```python
+# Create a new instance of the PdfDocument class
+pdf = PdfDocument()
+
+# Initialize text layout options for conversion:
+# True (Enable convertToMultipleSheet), False (Disable rotatedText), True (Enable overlapText)
+textOption = XlsxTextLayoutOptions(True, False, True)
+
+# Apply the text layout options for PDF to XLSX conversion
+pdf.ConvertOptions.SetPdfToXlsxOptions(textOption)
+```
+
+---
+
+# spire.pdf python conversion
+## Convert PDF to OFD with options (including temporary file storage)
+```python
+# Initialize PdfDocument instance
+pdf = PdfDocument()
+# Load PDF document
+pdf.LoadFromFile(inputFile)
+# Create OfdOptions instance
+ofdOptions = OfdOptions()
+# Enable temporary file storage
+ofdOptions.UseTempFileStorage = True
+# Apply conversion options
+pdf.ConvertOptions.SetPdfToOfdOptions(ofdOptions)
+# Save as OFD file
+pdf.SaveToFile(outputFile, FileFormat.OFD)
+# Close document
+pdf.Close()
+```
+
+---
+
+# spire.pdf python core functionality
+## PdfToSvgWithSpecifiedSize - Convert PDF to SVG with specified scaling factors
+```python
+# Initialize the converter with the input PDF file path
+converter = PdfToSvgConverter("data/Sample.pdf")
+
+# Set the horizontal scaling factor for the output SVG to 1.0 (no scaling)
+converter.SvgOptions.ScaleX = 1.0
+
+# Set the vertical scaling factor for the output SVG to 1.0 (no scaling)
+converter.SvgOptions.ScaleY = 1.0
+
+# Perform the conversion from PDF to SVG and save the result to the output file
+converter.Convert("toSvg.svg")
+```
+
+---
+
 
 

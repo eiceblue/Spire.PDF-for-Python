@@ -19,6 +19,8 @@ textreplacer.Options = options
 replacer.ReplaceAllText("Spire.PDF","E-iceblue")
 # Replace the first found word
 replacer.ReplaceText("Adobe Acrobat", "PDF editors")
+# replacer.ReplaceText("Adobe Acrobat", "PDF editors", Color.get_Blue()) 
+
 doc.SaveToFile(outputFile)
 doc.Close()
 
